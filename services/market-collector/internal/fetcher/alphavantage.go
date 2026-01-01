@@ -7,7 +7,7 @@ import (
 )
 
 type AlphaVantageResponse struct {
-	TimeSeries map[string]map[string]string `json: "Time Series (Daily)"`
+	TimeSeries map[string]map[string]string `json:"Time Series (Daily)"`
 }
 
 type AlphaVantageFetcher struct {
@@ -28,6 +28,7 @@ func (f *AlphaVantageFetcher) FetchDaily(symbol string) (AlphaVantageResponse, e
 	if err != nil {
 		return AlphaVantageResponse{}, fmt.Errorf("unexpected status code: %d", resp.StatusCode)
 	}
+	defer resp.Body.Close()
 
 	var data AlphaVantageResponse
 	err = json.NewDecoder(resp.Body).Decode(&data)
